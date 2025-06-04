@@ -18,6 +18,7 @@
 
 	<modules>
 		<module>product-microservice</module>
+		<module>client-microservice</module>
 	</modules>
 
 	<properties>
