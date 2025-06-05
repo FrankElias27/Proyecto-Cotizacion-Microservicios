@@ -17,6 +17,7 @@
 	<name>spring-boot-microservices</name>
 
 	<modules>
+		<module>api-gateway</module>
 		<module>product-microservice</module>
 		<module>client-microservice</module>
 		<module>quotation-microservice</module>
