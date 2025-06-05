@@ -22,3 +22,14 @@ services:
     volumes:
       - ./data/mysql-client:/var/lib/mysql
       - ./docker/mysql/initProduct.sql:/docker-entrypoint-initdb.d/initClient.sql
+
+  mysql-quotation:
+    image: mysql:8.3.0
+    container_name: mysql-quotation
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+    ports:
+      - "3309:3306"
+    volumes:
+      - ./data/mysql-quotation:/var/lib/mysql
+      - ./docker/mysql/initQuotation.sql:/docker-entrypoint-initdb.d/initQuotation.sql

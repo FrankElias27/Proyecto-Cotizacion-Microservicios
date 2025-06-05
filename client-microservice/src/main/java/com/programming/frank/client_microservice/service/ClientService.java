@@ -66,6 +66,15 @@ public class ClientService {
         log.info("Client deleted with ID: {}", clientId);
     }
 
+    public ClientResponse getClientById(Long clientId) {
+        var client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new RuntimeException("Client not found with ID: " + clientId));
+
+        log.info("Retrieved client: {}", client);
+
+        return mapToClientResponse(client);
+    }
+
     private ClientResponse mapToClientResponse(Client client) {
         return ClientResponse.builder()
                 .id(client.getId())

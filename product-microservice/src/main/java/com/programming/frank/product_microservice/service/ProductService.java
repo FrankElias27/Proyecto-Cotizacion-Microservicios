@@ -23,7 +23,7 @@ public class ProductService {
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
                 .skuCode(productRequest.getSkuCode())
-                .netPurchaseCostUSD(productRequest.getNetPurchaseCostUSD())
+                .price(productRequest.getPrice())
                 .build();
 
         productRepository.save(product);
@@ -47,11 +47,20 @@ public class ProductService {
         existingProduct.setName(productRequest.getName());
         existingProduct.setDescription(productRequest.getDescription());
         existingProduct.setSkuCode(productRequest.getSkuCode());
-        existingProduct.setNetPurchaseCostUSD(productRequest.getNetPurchaseCostUSD());
+        existingProduct.setPrice(productRequest.getPrice());
 
         productRepository.save(existingProduct);
 
         log.info("Product updated: {}", existingProduct);
+    }
+
+    public ProductResponse getProductById(Long productId) {
+        var product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
+
+        log.info("Retrieved client: {}", product);
+
+        return mapToProductResponse(product);
     }
 
     public void deleteProduct(Long productId) {
@@ -69,7 +78,7 @@ public class ProductService {
                 .name(product.getName())
                 .description(product.getDescription())
                 .skuCode(product.getSkuCode())
-                .netPurchaseCostUSD(product.getNetPurchaseCostUSD())
+                .price(product.getPrice())
                 .build();
     }
 }

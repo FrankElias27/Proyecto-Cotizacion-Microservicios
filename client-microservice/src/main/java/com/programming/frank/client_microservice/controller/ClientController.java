@@ -28,6 +28,12 @@ public class ClientController {
         return this.clientService.getAllClients();
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ClientResponse getClientById(@PathVariable Long id) {
+        return clientService.getClientById(id);
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateClient(@PathVariable Long id, @RequestBody ClientRequest clientRequest) {

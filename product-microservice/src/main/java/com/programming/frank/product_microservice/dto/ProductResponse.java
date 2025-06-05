@@ -17,5 +17,5 @@ public class ProductResponse {
     private String name;
     private String description;
     private String skuCode;
-    private BigDecimal netPurchaseCostUSD;
+    private BigDecimal price;
 }

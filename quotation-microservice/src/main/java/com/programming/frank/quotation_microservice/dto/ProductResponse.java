@@ -1,4 +1,4 @@
-package com.programming.frank.product_microservice.dto;
+package com.programming.frank.quotation_microservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductRequest {
+public class ProductResponse {
 
+    private Long id;
     private String name;
     private String description;
     private String skuCode;
