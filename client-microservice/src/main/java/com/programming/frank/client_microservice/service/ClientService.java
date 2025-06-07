@@ -84,6 +84,14 @@ public class ClientService {
         return clientsPage.map(this::mapToClientResponse);
     }
 
+    public Page<ClientResponse> searchClients(String keyword, Pageable pageable) {
+        var clientsPage = clientRepository.searchByKeyword(keyword.toLowerCase(), pageable);
+
+        log.info("Search for keyword '{}', found {} results", keyword, clientsPage.getTotalElements());
+
+        return clientsPage.map(this::mapToClientResponse);
+    }
+
     private ClientResponse mapToClientResponse(Client client) {
         return ClientResponse.builder()
                 .id(client.getId())

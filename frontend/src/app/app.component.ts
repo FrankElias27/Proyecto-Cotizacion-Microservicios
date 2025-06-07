@@ -27,7 +27,9 @@ export class AppComponent {
         console.log('app authenticated', isAuthenticated);
           if (isAuthenticated) {
           this.router.navigate(['/dashboard']);
-        }
+        }else {
+        this.router.navigate(['']);
+      }
 
       })
 

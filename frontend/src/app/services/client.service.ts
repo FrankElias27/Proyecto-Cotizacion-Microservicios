@@ -9,7 +9,7 @@ import { Page } from '../model/page';
 })
 export class ClientService {
 
-  private baseUrl = '/api/client';
+  private baseUrl = 'http://localhost:9000/api/client';
 
   constructor(private http: HttpClient) { }
 
@@ -22,6 +22,40 @@ export class ClientService {
       params = params.set('sort', sort);
     }
 
-    return this.http.get<Page<Client>>(this.baseUrl, { params });
+    return this.http.get<Page<Client>>(`${this.baseUrl}/page`, { params });
   }
+
+  searchClients(query: string, page: number = 0, size: number = 10, sort?: string): Observable<Page<Client>> {
+    let params = new HttpParams()
+      .set('query', query)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (sort) {
+      params = params.set('sort', sort);
+    }
+
+    return this.http.get<Page<Client>>(`${this.baseUrl}/search`, { params });
+  }
+
+
+  getClientById(id: number): Observable<Client> {
+    return this.http.get<Client>(`${this.baseUrl}/${id}`);
+  }
+
+
+  deleteClient(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+
+  updateClient(id: number, clientRequest: Client): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${id}`, clientRequest);
+  }
+
+  addClient(clientRequest: Client): Observable<void> {
+  return this.http.post<void>(this.baseUrl, clientRequest);
+}
+
+
 }

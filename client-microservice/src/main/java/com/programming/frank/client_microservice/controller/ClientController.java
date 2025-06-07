@@ -42,11 +42,22 @@ public class ClientController {
         this.clientService.updateClient(id, clientRequest);
     }
 
-    @GetMapping
+    @GetMapping("/page")
     @ResponseStatus(HttpStatus.OK)
     public Page<ClientResponse> getClients(Pageable pageable) {
         return clientService.getClientsPage(pageable);
     }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ClientResponse> searchClients(
+            @RequestParam("query") String query,
+            Pageable pageable
+    ) {
+        return clientService.searchClients(query, pageable);
+    }
+
+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
