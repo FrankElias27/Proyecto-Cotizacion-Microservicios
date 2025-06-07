@@ -4,6 +4,8 @@ import com.programming.frank.client_microservice.dto.ClientRequest;
 import com.programming.frank.client_microservice.dto.ClientResponse;
 import com.programming.frank.client_microservice.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +40,12 @@ public class ClientController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateClient(@PathVariable Long id, @RequestBody ClientRequest clientRequest) {
         this.clientService.updateClient(id, clientRequest);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ClientResponse> getClients(Pageable pageable) {
+        return clientService.getClientsPage(pageable);
     }
 
     @DeleteMapping("/{id}")

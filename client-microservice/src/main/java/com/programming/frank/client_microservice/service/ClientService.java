@@ -6,6 +6,8 @@ import com.programming.frank.client_microservice.model.Client;
 import com.programming.frank.client_microservice.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -73,6 +75,13 @@ public class ClientService {
         log.info("Retrieved client: {}", client);
 
         return mapToClientResponse(client);
+    }
+
+    public Page<ClientResponse> getClientsPage(Pageable pageable) {
+        var clientsPage = clientRepository.findAll(pageable);
+        log.info("Retrieved page {} of clients, size: {}", clientsPage.getNumber(), clientsPage.getSize());
+
+        return clientsPage.map(this::mapToClientResponse);
     }
 
     private ClientResponse mapToClientResponse(Client client) {
