@@ -57,5 +57,27 @@ export class ClientService {
   return this.http.post<void>(this.baseUrl, clientRequest);
 }
 
+downloadReport(params: { [key: string]: any }): Observable<Blob> {
+    let httpParams = new HttpParams();
+    Object.keys(params).forEach(key => {
+      httpParams = httpParams.set(key, params[key]);
+    });
+
+    return this.http.get(`${this.baseUrl}/report`, {
+      params: httpParams,
+      responseType: 'blob',
+      observe: 'body'
+    });
+  }
+
+  importClientsFromExcel(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post(`${this.baseUrl}/import`, formData, {
+      responseType: 'text'
+    });
+  }
+
 
 }

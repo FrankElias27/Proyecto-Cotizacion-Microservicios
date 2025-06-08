@@ -10,11 +10,12 @@ import Swal from 'sweetalert2';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EditClientComponent } from '../edit-client/edit-client.component';
 import { CreateClientComponent } from '../create-client/create-client.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-client',
   standalone: true,
-  imports: [MatTableModule,MatPaginator, FormsModule,MatIconModule,MatDialogModule],
+  imports: [MatTableModule,MatPaginator, FormsModule,MatIconModule,MatDialogModule,CommonModule],
   templateUrl: './client.component.html',
   styleUrl: './client.component.css'
 })
@@ -30,6 +31,8 @@ export class ClientComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
 
   searchValue: string = '';
+
+  selectedFile: File | null = null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -174,4 +177,41 @@ export class ClientComponent implements OnInit {
       }
     });
   }
+
+  exportReport() {
+  const params = {
+    tipo: 'EXCEL',
+  };
+
+  this.clientService.downloadReport(params).subscribe(blob => {
+    const a = document.createElement('a');
+    const objectUrl = URL.createObjectURL(blob);
+    a.href = objectUrl;
+
+    a.download = 'ReporteClientes.xlsx';
+
+    a.click();
+    URL.revokeObjectURL(objectUrl);
+  }, error => {
+    console.error('Error al exportar reporte:', error);
+  });
+}
+
+
+
+onFileSelectedAndUpload(event: Event): void {
+  const file = (event.target as HTMLInputElement).files?.[0];
+
+  if (!file) return;
+
+  if (!file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) {
+    Swal.fire('Formato inválido', 'Solo se permiten archivos .xls o .xlsx', 'warning');
+    return;
+  }
+
+  this.clientService.importClientsFromExcel(file).subscribe({
+    next: (res) => Swal.fire('✅ Éxito', res, 'success'),
+    error: (err) => Swal.fire('❌ Error', err.error || 'Algo salió mal', 'error')
+  });
+}
 }
