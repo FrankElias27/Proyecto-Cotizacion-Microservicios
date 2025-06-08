@@ -115,34 +115,39 @@ public class ClientService {
             for (Row row : sheet) {
                 int rowIndex = row.getRowNum();
 
-                if (rowIndex <= 2) {
-
+                // Saltar las primeras dos filas (título general + encabezados)
+                if (rowIndex <= 0) {
                     continue;
                 }
 
+                // Obtener cada celda por índice (aunque esté vacía)
+                Cell idCell = row.getCell(1); // columna B (índice 1)
+                Cell nameCell = row.getCell(2); // columna C
+                Cell lastNameCell = row.getCell(3); // columna D
+                Cell dniCell = row.getCell(4); // columna E
+                Cell emailCell = row.getCell(5); // columna F
+                Cell phoneCell = row.getCell(6); // columna G
+                Cell addressCell = row.getCell(7); // columna H
 
                 Long id = null;
-                Cell idCell = row.getCell(0);
-                if (idCell != null && idCell.getCellType() == CellType.NUMERIC) {
-                    id = (long) idCell.getNumericCellValue();
-                } else if (idCell != null && idCell.getCellType() == CellType.STRING) {
-                    try {
-                        id = Long.parseLong(idCell.getStringCellValue());
-                    } catch (NumberFormatException e) {
-
-                        id = null;
+                if (idCell != null) {
+                    if (idCell.getCellType() == CellType.NUMERIC) {
+                        id = (long) idCell.getNumericCellValue();
+                    } else if (idCell.getCellType() == CellType.STRING) {
+                        try {
+                            id = Long.parseLong(idCell.getStringCellValue().trim());
+                        } catch (NumberFormatException ignored) {}
                     }
                 }
 
-                String firstName = getCellStringValue(row.getCell(1));
-                String lastName = getCellStringValue(row.getCell(2));
-                String dni = getCellStringValue(row.getCell(3));
-                String email = getCellStringValue(row.getCell(4));
-                String phone = getCellStringValue(row.getCell(5));
-                String address = getCellStringValue(row.getCell(6));
+                String firstName = getCellStringValue(nameCell);
+                String lastName = getCellStringValue(lastNameCell);
+                String dni = getCellStringValue(dniCell);
+                String email = getCellStringValue(emailCell);
+                String phone = getCellStringValue(phoneCell);
+                String address = getCellStringValue(addressCell);
 
                 if (id != null && clientRepository.existsById(id)) {
-
                     Client existingClient = clientRepository.findById(id).get();
                     existingClient.setFirstName(firstName);
                     existingClient.setLastName(lastName);
@@ -154,7 +159,6 @@ public class ClientService {
                     clientRepository.save(existingClient);
                     log.info("Client updated: {}", existingClient);
                 } else {
-
                     Client newClient = Client.builder()
                             .firstName(firstName)
                             .lastName(lastName)
@@ -169,6 +173,7 @@ public class ClientService {
                 }
                 processedCount++;
             }
+
             log.info("Processed {} rows from Excel file", processedCount);
 
         } catch (Exception e) {
@@ -180,14 +185,15 @@ public class ClientService {
     private String getCellStringValue(Cell cell) {
         if (cell == null) return null;
 
-        if (cell.getCellType() == CellType.STRING) {
-            return cell.getStringCellValue().trim();
-        } else if (cell.getCellType() == CellType.NUMERIC) {
-            return String.valueOf((long)cell.getNumericCellValue());
-        } else if (cell.getCellType() == CellType.BOOLEAN) {
-            return String.valueOf(cell.getBooleanCellValue());
-        } else {
-            return null;
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue().trim();
+            case NUMERIC:
+                return String.valueOf((long) cell.getNumericCellValue());
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            default:
+                return null;
         }
     }
 }

@@ -205,13 +205,39 @@ onFileSelectedAndUpload(event: Event): void {
   if (!file) return;
 
   if (!file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) {
-    Swal.fire('Formato inválido', 'Solo se permiten archivos .xls o .xlsx', 'warning');
+    Swal.fire({
+      icon: 'warning',
+      title: 'Formato inválido',
+      text: 'Solo se permiten archivos .xls o .xlsx',
+      confirmButtonColor: '#f39c12',
+      confirmButtonText: 'Entendido',
+    });
     return;
   }
 
   this.clientService.importClientsFromExcel(file).subscribe({
-    next: (res) => Swal.fire('✅ Éxito', res, 'success'),
-    error: (err) => Swal.fire('❌ Error', err.error || 'Algo salió mal', 'error')
+    next: (res) => {
+      Swal.fire({
+        icon: 'success',
+        title: '¡Importación exitosa!',
+        text: res,
+        confirmButtonColor: '#28a745',
+        confirmButtonText: 'OK',
+      }).then((result) => {
+        if (result.isConfirmed) {
+           this.loadClients();
+        }
+      });
+    },
+    error: (err) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al importar',
+        text: err.error || 'Algo salió mal al procesar el archivo',
+        confirmButtonColor: '#dc3545',
+        confirmButtonText: 'Reintentar',
+      });
+    }
   });
 }
 }
