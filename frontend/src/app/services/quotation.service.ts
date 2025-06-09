@@ -24,4 +24,12 @@ export class QuotationService {
 
         return this.http.get<Page<Quotation>>(`${this.baseUrl}/page`, { params });
       }
+
+      addQuotation(quotationRequest: Quotation): Observable<void> {
+        return this.http.post<void>(this.baseUrl, quotationRequest);
+      }
+
+      deleteQuotation(id: number): Observable<void> {
+      return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    }
     }

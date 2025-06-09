@@ -27,4 +27,10 @@ public class QuotationController {
     public Page<QuotationsResponse> getQuotations(Pageable pageable) {
         return quotationService.getQuotationsPage(pageable);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteQuotation(@PathVariable Long id) {
+        this.quotationService.deleteQuotation(id);
+    }
 }

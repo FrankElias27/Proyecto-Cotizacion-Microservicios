@@ -1,5 +1,6 @@
 package com.programming.frank.quotation_microservice.dto;
 
+import com.programming.frank.quotation_microservice.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class QuotationsResponse {
     private LocalDateTime date;
     private ClientResponse client;
     private String subject;
+    private Status status;
     private BigDecimal total;
     private Set<QuotationDetailResponse> details;
 }

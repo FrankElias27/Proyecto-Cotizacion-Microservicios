@@ -31,4 +31,6 @@ public class QuotationDetail {
 
     @Column(name = "unit_price")
     private BigDecimal unitPrice;
+
+    private BigDecimal subtotal;
 }

@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Nueva Cotización</h2>
+
+<form [formGroup]="quotationForm" (ngSubmit)="onSubmit()" class="p-4">
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Cliente</mat-label>
+    <input type="text" matInput formControlName="client" [matAutocomplete]="auto" required />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayClientFn"
+      (optionSelected)="onClientSelected($event.option.value)">
+      <mat-option *ngFor="let client of filteredClients" [value]="client">
+        {{ client.firstName }} {{ client.lastName }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="quotationForm.get('client')?.hasError('required')">
+      El cliente es obligatorio
+    </mat-error>
+  </mat-form-field>
+
+
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Asunto</mat-label>
+    <input matInput formControlName="subject" required />
+    <mat-error *ngIf="quotationForm.get('subject')?.hasError('required')">
+      El asunto es obligatorio
+    </mat-error>
+  </mat-form-field>
+
+  <div mat-dialog-actions align="end" class="mt-4">
+    <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="quotationForm.invalid">
+      Guardar
+    </button>
+  </div>
+</form>

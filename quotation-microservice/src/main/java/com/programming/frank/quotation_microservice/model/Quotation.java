@@ -1,5 +1,6 @@
 package com.programming.frank.quotation_microservice.model;
 
+import com.programming.frank.quotation_microservice.enums.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
@@ -31,6 +32,8 @@ public class Quotation {
     private Long clientId; // ID from client microservice
 
     private String subject;
+
+    private Status status;
 
     private BigDecimal total;
 

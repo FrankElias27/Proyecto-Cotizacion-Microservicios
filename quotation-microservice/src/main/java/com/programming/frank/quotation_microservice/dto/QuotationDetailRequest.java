@@ -18,4 +18,5 @@ public class QuotationDetailRequest {
     private Long productId;
     private Integer quantity;
     private BigDecimal unitPrice;
+    private BigDecimal subtotal;
 }

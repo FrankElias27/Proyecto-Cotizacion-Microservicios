@@ -15,181 +15,181 @@ import { EditProductComponent } from '../edit-product/edit-product.component';
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [MatTableModule,MatPaginator, FormsModule,MatIconModule,MatDialogModule,CommonModule],
+  imports: [MatTableModule, MatPaginator, FormsModule, MatIconModule, MatDialogModule, CommonModule],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
 export class ProductComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'description', 'skuCode','price','actions'];
-    dataSource = new MatTableDataSource<Product>([]);
+  displayedColumns: string[] = ['id', 'name', 'description', 'skuCode', 'price', 'actions'];
+  dataSource = new MatTableDataSource<Product>([]);
 
-    totalElements = 0;
-    pageSize = 10;
-    pageIndex = 0;
-    sortActive = 'id';
-    sortDirection: 'asc' | 'desc' = 'asc';
+  totalElements = 0;
+  pageSize = 10;
+  pageIndex = 0;
+  sortActive = 'id';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
-    searchValue: string = '';
+  searchValue: string = '';
 
-    selectedFile: File | null = null;
+  selectedFile: File | null = null;
 
-    @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    constructor(private productService: ProductService,private dialog: MatDialog) {}
+  constructor(private productService: ProductService, private dialog: MatDialog) { }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
+    const sortParam = `${this.sortActive},${this.sortDirection}`;
+    this.productService.getProducts(this.pageIndex, this.pageSize, sortParam).subscribe({
+      next: (page: Page<Product>) => {
+        this.dataSource.data = page.content;
+        this.totalElements = page.totalElements;
+      },
+      error: (err) => {
+        console.error('Error cargando productos', err);
+      }
+    });
+  }
+
+  searchProducts(): void {
+    const sortParam = `${this.sortActive},${this.sortDirection}`;
+    this.productService.searchProducts(this.searchValue.trim(), this.pageIndex, this.pageSize, sortParam).subscribe({
+      next: (page: Page<Product>) => {
+        this.dataSource.data = page.content;
+        this.totalElements = page.totalElements;
+      },
+      error: (err) => {
+        console.error('Error buscando productos', err);
+      }
+    });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    if (this.searchValue.trim()) {
+      this.searchProducts();
+    } else {
       this.loadProducts();
     }
+  }
 
-    loadProducts(): void {
-      const sortParam = `${this.sortActive},${this.sortDirection}`;
-      this.productService.getProducts(this.pageIndex, this.pageSize, sortParam).subscribe({
-        next: (page: Page<Product>) => {
-          this.dataSource.data = page.content;
-          this.totalElements = page.totalElements;
-        },
-        error: (err) => {
-          console.error('Error cargando productos', err);
-        }
-      });
+  applyFilter(): void {
+    this.pageIndex = 0;
+
+    if (this.searchValue.trim()) {
+      this.searchProducts();
+    } else {
+      this.loadProducts();
     }
+  }
 
-    searchProducts(): void {
-      const sortParam = `${this.sortActive},${this.sortDirection}`;
-      this.productService.searchProducts(this.searchValue.trim(), this.pageIndex, this.pageSize, sortParam).subscribe({
-        next: (page: Page<Product>) => {
-          this.dataSource.data = page.content;
-          this.totalElements = page.totalElements;
-        },
-        error: (err) => {
-          console.error('Error buscando productos', err);
-        }
-      });
-    }
+  openAddProductModal() {
+    const dialogRef = this.dialog.open(CreateProductComponent, {
+      width: '400px',
+    });
 
-     onPageChange(event: PageEvent): void {
-      this.pageIndex = event.pageIndex;
-      this.pageSize = event.pageSize;
-
-      if (this.searchValue.trim()) {
-        this.searchProducts();
-      } else {
-        this.loadProducts();
-      }
-    }
-
-     applyFilter(): void {
-      this.pageIndex = 0;
-
-      if (this.searchValue.trim()) {
-        this.searchProducts();
-      } else {
-        this.loadProducts();
-      }
-    }
-
-      openAddProductModal() {
-  const dialogRef = this.dialog.open(CreateProductComponent, {
-    width: '400px',
-  });
-
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      this.productService.addProduct(result).subscribe({
-        next: (newProduct) => {
-          console.log('Producto creado:', newProduct);
-          this.loadProducts();
-          Swal.fire({
-            icon: 'success',
-            title: '¡Producto guardado!',
-            text: 'El producto ha sido creado exitosamente.',
-            confirmButtonText: 'OK'
-          });
-        },
-        error: (error) => {
-          console.error('Error al crear producto:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo guardar el producto.'
-          });
-        }
-      });
-    }
-  });
-}
-
-     editProduct(id: number) {
-      this.productService.getProductById(id).subscribe(product => {
-        const dialogRef = this.dialog.open(EditProductComponent, {
-          width: '400px',
-          data: product
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            const updatedProduct: Product = { ...product, ...result };
-
-            this.productService.updateProduct(id, updatedProduct).subscribe({
-              next: () => {
-                // Actualizar localmente el datasource para reflejar cambios
-                const index = this.dataSource.data.findIndex(c => c.id === id);
-                  if (index !== -1) {
-                    this.dataSource.data[index] = updatedProduct;
-                    this.dataSource.data = [...this.dataSource.data]; // Clonamos para que Angular detecte el cambio
-                  }
-
-                Swal.fire('¡Éxito!', 'Producto actualizado correctamente.', 'success');
-              },
-              error: () => {
-                Swal.fire('Error', 'No se pudo actualizar el producto.', 'error');
-              }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.productService.addProduct(result).subscribe({
+          next: (newProduct) => {
+            console.log('Producto creado:', newProduct);
+            this.loadProducts();
+            Swal.fire({
+              icon: 'success',
+              title: '¡Producto guardado!',
+              text: 'El producto ha sido creado exitosamente.',
+              confirmButtonText: 'OK'
+            });
+          },
+          error: (error) => {
+            console.error('Error al crear producto:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo guardar el producto.'
             });
           }
         });
-      }, () => {
-        Swal.fire('Error', 'No se pudo obtener los datos del producto.', 'error');
-      });
-    }
+      }
+    });
+  }
 
-     deleteProduct(id: number) {
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.productService.deleteProduct(id).subscribe({
+  editProduct(id: number) {
+    this.productService.getProductById(id).subscribe(product => {
+      const dialogRef = this.dialog.open(EditProductComponent, {
+        width: '400px',
+        data: product
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          const updatedProduct: Product = { ...product, ...result };
+
+          this.productService.updateProduct(id, updatedProduct).subscribe({
             next: () => {
-              Swal.fire({
-                icon: 'success',
-                title: 'Eliminado',
-                text: 'Producto eliminado correctamente',
-                timer: 1000,
-                showConfirmButton: false
-              });
-              this.loadProducts();
+              // Actualizar localmente el datasource para reflejar cambios
+              const index = this.dataSource.data.findIndex(c => c.id === id);
+              if (index !== -1) {
+                this.dataSource.data[index] = updatedProduct;
+                this.dataSource.data = [...this.dataSource.data]; // Clonamos para que Angular detecte el cambio
+              }
+
+              Swal.fire('¡Éxito!', 'Producto actualizado correctamente.', 'success');
             },
-            error: (err) => {
-              console.error(err);
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error al eliminar producto'
-              });
+            error: () => {
+              Swal.fire('Error', 'No se pudo actualizar el producto.', 'error');
             }
           });
         }
       });
-    }
+    }, () => {
+      Swal.fire('Error', 'No se pudo obtener los datos del producto.', 'error');
+    });
+  }
 
-    exportReport() {
+  deleteProduct(id: number) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¡No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.productService.deleteProduct(id).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminado',
+              text: 'Producto eliminado correctamente',
+              timer: 1000,
+              showConfirmButton: false
+            });
+            this.loadProducts();
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error al eliminar producto'
+            });
+          }
+        });
+      }
+    });
+  }
+
+  exportReport() {
     const params = {
       tipo: 'EXCEL',
     };
@@ -236,7 +236,7 @@ export class ProductComponent implements OnInit {
           confirmButtonText: 'OK',
         }).then((result) => {
           if (result.isConfirmed) {
-             this.loadProducts();
+            this.loadProducts();
           }
         });
       },

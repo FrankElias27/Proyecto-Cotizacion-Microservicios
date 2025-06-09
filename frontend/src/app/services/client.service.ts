@@ -79,5 +79,9 @@ downloadReport(params: { [key: string]: any }): Observable<Blob> {
     });
   }
 
+  getAllClients(): Observable<Client[]> {
+  return this.http.get<Client[]>(this.baseUrl);
+}
+
 
 }

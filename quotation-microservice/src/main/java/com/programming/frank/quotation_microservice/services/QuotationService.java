@@ -3,6 +3,7 @@ package com.programming.frank.quotation_microservice.services;
 import com.programming.frank.quotation_microservice.client.ClientClient;
 import com.programming.frank.quotation_microservice.dto.QuotationRequest;
 import com.programming.frank.quotation_microservice.dto.QuotationsResponse;
+import com.programming.frank.quotation_microservice.enums.Status;
 import com.programming.frank.quotation_microservice.model.Quotation;
 import com.programming.frank.quotation_microservice.repository.QuotationRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +34,22 @@ public class QuotationService {
                 .subject(quotationRequest.getSubject())
                 .total(quotationRequest.getTotal())
                 .date(LocalDateTime.now())
+                .status(Status.CREATED)
                 .build();
 
 
         quotationRepository.save(quotation);
 
         log.info("Quotation saved for client ID {}: {}", quotationRequest.getClientId(), quotation);
+    }
+
+    public void deleteQuotation(Long quotationId) {
+        var existingQuotation = quotationRepository.findById(quotationId)
+                .orElseThrow(() -> new RuntimeException("Quotation not found with ID: " + quotationId));
+
+        quotationRepository.delete(existingQuotation);
+
+        log.info("Quotation deleted with ID: {}", quotationId);
     }
 
     public Page<QuotationsResponse> getQuotationsPage(Pageable pageable) {
@@ -55,8 +66,11 @@ public class QuotationService {
                 .client(clientClient.getClientById(quotation.getClientId()))
                 .total(quotation.getTotal())
                 .subject(quotation.getSubject())
+                .status(quotation.getStatus())
                 .build();
     }
+
+
 
 
 }
