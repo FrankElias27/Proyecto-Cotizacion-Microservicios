@@ -1,6 +1,5 @@
 package com.programming.frank.quotation_microservice.dto;
 
-import com.programming.frank.quotation_microservice.model.Quotation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +11,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QuotationDetailRequest {
+public class QuotationDetailResponse {
 
+    private Long id;
     private Long quotationId;
     private Long productId;
     private Integer quantity;

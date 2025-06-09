@@ -1,1 +1,110 @@
-<p>quotation works!</p>
+<section class="flex flex-col items-center h-screen bg-gray-50 dark:bg-gray-900 items-center justify-center">
+  <div class="max-w-screen-xl px-4 mx-auto lg:px-12 w-full">
+    <!-- Start coding here -->
+    <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
+      <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
+        <div class="w-full md:w-1/2">
+
+
+          <input
+          type="text"
+          id="simple-search"
+
+          placeholder="Buscar..."
+          class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg"
+        />
+        </div>
+        <div class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
+          <button  type="button"
+            class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+            <svg class="w-4 h-4 mr-1 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z" clip-rule="evenodd"/>
+            </svg>
+            Add Quotation
+          </button>
+          <div class="flex items-center w-full space-x-3 md:w-auto">
+            <input
+              type="file"
+              accept=".xls,.xlsx"
+
+              #fileInput
+              hidden
+            />
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+   <div class="w-full max-w-screen-xl px-4 mx-auto lg:px-12 mt-6">
+    <table mat-table [dataSource]="dataSource" class="min-w-full bg-white text-black" >
+
+
+  <ng-container matColumnDef="id">
+  <th mat-header-cell *matHeaderCellDef> N° </th>
+  <td mat-cell *matCellDef="let quotation; let i = index"> {{ i + 1 }} </td>
+</ng-container>
+
+
+  <ng-container matColumnDef="client">
+    <th mat-header-cell *matHeaderCellDef> Client </th>
+    <td mat-cell *matCellDef="let quotation"> {{quotation.client.firstName}} {{quotation.client.lastName}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="subject">
+    <th mat-header-cell *matHeaderCellDef> Subject </th>
+    <td mat-cell *matCellDef="let quotation"> {{quotation.subject}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="details">
+    <th mat-header-cell *matHeaderCellDef> Details </th>
+    <td mat-cell *matCellDef="let quotation">
+     <button mat-raised-button class="button-label verde" >
+                <mat-icon aria-hidden="false" aria-label="Ver detalle" style="color: white;">description</mat-icon>
+                <span style="color: white;">Ver Detalle</span>
+              </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef> Date </th>
+    <td mat-cell *matCellDef="let quotation"> {{ quotation.date | date:'short' }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="total">
+    <th mat-header-cell *matHeaderCellDef> Total </th>
+    <td mat-cell *matCellDef="let quotation"> s/.{{quotation.total}} </td>
+  </ng-container>
+
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+   <ng-container matColumnDef="actions">
+  <th mat-header-cell *matHeaderCellDef> Acciones </th>
+  <td mat-cell *matCellDef="let product">
+    <button mat-icon-button color="primary" >
+      <mat-icon>send</mat-icon>
+    </button>
+    <button mat-icon-button color="warn" >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </td>
+</ng-container>
+
+</table>
+
+<mat-paginator [length]="totalElements"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[5, 10, 25]"
+               (page)="onPageChange($event)">
+</mat-paginator>
+  </div>
+
+</section>
+
+

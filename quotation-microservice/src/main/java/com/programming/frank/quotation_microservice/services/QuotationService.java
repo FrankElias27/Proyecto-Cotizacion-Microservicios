@@ -2,10 +2,13 @@ package com.programming.frank.quotation_microservice.services;
 
 import com.programming.frank.quotation_microservice.client.ClientClient;
 import com.programming.frank.quotation_microservice.dto.QuotationRequest;
+import com.programming.frank.quotation_microservice.dto.QuotationsResponse;
 import com.programming.frank.quotation_microservice.model.Quotation;
 import com.programming.frank.quotation_microservice.repository.QuotationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,8 +28,6 @@ public class QuotationService {
             throw new RuntimeException("Client with ID " + quotationRequest.getClientId() + " not found.");
         }
 
-
-
         var quotation = Quotation.builder()
                 .clientId(quotationRequest.getClientId())
                 .subject(quotationRequest.getSubject())
@@ -39,4 +40,23 @@ public class QuotationService {
 
         log.info("Quotation saved for client ID {}: {}", quotationRequest.getClientId(), quotation);
     }
+
+    public Page<QuotationsResponse> getQuotationsPage(Pageable pageable) {
+        var quotationsPage = quotationRepository.findAll(pageable);
+        log.info("Retrieved page {} of quotations, size: {}", quotationsPage.getNumber(), quotationsPage.getSize());
+
+        return quotationsPage.map(this::mapToQuotationResponse);
+    }
+
+    private QuotationsResponse mapToQuotationResponse(Quotation quotation) {
+        return QuotationsResponse.builder()
+                .id(quotation.getId())
+                .date(quotation.getDate())
+                .client(clientClient.getClientById(quotation.getClientId()))
+                .total(quotation.getTotal())
+                .subject(quotation.getSubject())
+                .build();
+    }
+
+
 }

@@ -1,0 +1,33 @@
+
+.mat-mdc-table {
+  background-color: #f0f0f0;
+}
+
+.mat-mdc-row {
+  background-color: #ffffff;
+}
+
+.mat-mdc-row:hover {
+  background-color: #e0e0e0;
+}
+
+.mat-mdc-header-row {
+  background-color: #ffffff;
+}
+
+.mat-mdc-cell {
+  background-color: #ffffff;
+}
+
+.verde {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 10px;
+    padding: 1px 10px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+.verde mat-icon {
+    margin-right: 5px;
+  }

@@ -30,9 +30,9 @@ public class Quotation {
     @Column(name = "client_id")
     private Long clientId; // ID from client microservice
 
-    private BigDecimal total;
-
     private String subject;
+
+    private BigDecimal total;
 
     @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<QuotationDetail> details = new HashSet<>();

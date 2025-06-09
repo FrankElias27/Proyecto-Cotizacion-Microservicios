@@ -6,17 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QuotationRequest {
+public class QuotationsResponse {
 
-    private Long clientId;
+    private Long id;
+    private LocalDateTime date;
+    private ClientResponse client;
     private String subject;
     private BigDecimal total;
-    private Set<QuotationDetailRequest> details;
-
+    private Set<QuotationDetailResponse> details;
 }
