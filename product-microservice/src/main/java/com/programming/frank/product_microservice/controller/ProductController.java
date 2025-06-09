@@ -4,6 +4,8 @@ import com.programming.frank.product_microservice.dto.ProductRequest;
 import com.programming.frank.product_microservice.dto.ProductResponse;
 import com.programming.frank.product_microservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +40,21 @@ public class ProductController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
         this.productService.updateProduct(id, productRequest);
+    }
+
+    @GetMapping("/page")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ProductResponse> getProducts(Pageable pageable) {
+        return productService.getProductsPage(pageable);
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ProductResponse> searchProducts(
+            @RequestParam("query") String query,
+            Pageable pageable
+    ) {
+        return productService.searchProducts(query, pageable);
     }
 
     @DeleteMapping("/{id}")

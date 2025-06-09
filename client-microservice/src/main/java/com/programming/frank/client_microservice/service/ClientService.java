@@ -62,14 +62,6 @@ public class ClientService {
         log.info("Client updated: {}", existingClient);
     }
 
-    public void deleteClient(Long clientId) {
-        var existingClient = clientRepository.findById(clientId)
-                .orElseThrow(() -> new RuntimeException("Client not found with ID: " + clientId));
-
-        clientRepository.delete(existingClient);
-
-        log.info("Client deleted with ID: {}", clientId);
-    }
 
     public ClientResponse getClientById(Long clientId) {
         var client = clientRepository.findById(clientId)
@@ -78,6 +70,15 @@ public class ClientService {
         log.info("Retrieved client: {}", client);
 
         return mapToClientResponse(client);
+    }
+
+    public void deleteClient(Long clientId) {
+        var existingClient = clientRepository.findById(clientId)
+                .orElseThrow(() -> new RuntimeException("Client not found with ID: " + clientId));
+
+        clientRepository.delete(existingClient);
+
+        log.info("Client deleted with ID: {}", clientId);
     }
 
     public Page<ClientResponse> getClientsPage(Pageable pageable) {

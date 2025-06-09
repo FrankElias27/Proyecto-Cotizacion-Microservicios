@@ -100,9 +100,20 @@ export class ClientComponent implements OnInit {
           next: (newClient) => {
             console.log('Cliente creado:', newClient);
             this.loadClients();
+            Swal.fire({
+                        icon: 'success',
+                        title: '¡Cliente guardado!',
+                        text: 'El cliente ha sido creado exitosamente.',
+                        confirmButtonText: 'OK'
+                      });
           },
           error: (error) => {
             console.error('Error al crear cliente:', error);
+            Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'No se pudo guardar el cliente.'
+                      });
           }
         });
       }

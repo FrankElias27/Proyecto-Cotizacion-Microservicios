@@ -1,24 +1,20 @@
-/* Cambiar el color de fondo de la tabla */
+
 .mat-mdc-table {
   background-color: #f0f0f0;
 }
 
-/* Cambiar el color de fondo de las filas */
 .mat-mdc-row {
   background-color: #ffffff;
 }
 
-/* Cambiar el color de fondo al pasar el cursor sobre las filas */
 .mat-mdc-row:hover {
   background-color: #e0e0e0;
 }
 
-/* Cambiar el color de la cabecera */
 .mat-mdc-header-row {
   background-color: #ffffff;
 }
 
-/* Cambiar el color de las celdas */
 .mat-mdc-cell {
   background-color: #ffffff;
 }
