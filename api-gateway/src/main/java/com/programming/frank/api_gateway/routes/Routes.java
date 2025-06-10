@@ -86,6 +86,15 @@ public class Routes {
     }
 
     @Bean
+    public RouterFunction<ServerResponse> quotationDetailServiceRoute(){
+        return GatewayRouterFunctions.route("quotation_service")
+                .route(RequestPredicates.path("/api/quotation-detail/**"), HandlerFunctions.http(quotationServiceUrl))
+                .filter(CircuitBreakerFilterFunctions.circuitBreaker("quotationServiceCircuitBreaker",
+                        URI.create("forward:/fallbackRoute")))
+                .build();
+    }
+
+    @Bean
     public RouterFunction<ServerResponse> fallbackRoute() {
         return route("fallbackRoute")
                 .GET("/fallbackRoute", request -> ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)

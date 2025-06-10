@@ -78,4 +78,8 @@ export class ProductService {
         responseType: 'text'
       });
     }
+
+    getAllProducts(): Observable<Product[]> {
+      return this.http.get<Product[]>(this.baseUrl);
+    }
 }

@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Nuevo Detalle</h2>
+
+<form [formGroup]="quotationDetailForm" (ngSubmit)="onSubmit()" class="p-4">
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Producto</mat-label>
+    <input type="text" matInput formControlName="product" [matAutocomplete]="auto" required />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductFn"
+      (optionSelected)="onProductSelected($event.option.value)">
+      <mat-option *ngFor="let product of filteredProducts" [value]="product">
+        {{ product.name }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="quotationDetailForm.get('product')?.hasError('required')">
+      El producto es obligatorio
+    </mat-error>
+  </mat-form-field>
+
+
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Cantidad</mat-label>
+    <input matInput formControlName="quantity" required />
+    <mat-error *ngIf="quotationDetailForm.get('quantity')?.hasError('required')">
+      La cantidad es obligatoria
+    </mat-error>
+  </mat-form-field>
+
+  <div mat-dialog-actions align="end" class="mt-4">
+    <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="quotationDetailForm.invalid">
+      Guardar
+    </button>
+  </div>
+</form>

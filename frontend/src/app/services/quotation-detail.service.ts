@@ -11,23 +11,42 @@ export class QuotationDetailService {
 
   private baseUrl = 'http://localhost:9000/api/quotation-detail';
 
-      constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-      getQuotationDetail(page: number = 0, size: number = 10, sort?: string): Observable<Page<QuotationDetail>> {
-        let params = new HttpParams()
-          .set('page', page.toString())
-          .set('size', size.toString());
+  getQuotationDetail(page: number = 0, size: number = 10, sort?: string): Observable<Page<QuotationDetail>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
 
-        if (sort) {
-          params = params.set('sort', sort);
-        }
-
-        return this.http.get<Page<QuotationDetail>>(`${this.baseUrl}/page`, { params });
-      }
-
-      addQuotationDetail(quotationDetailRequest: QuotationDetail): Observable<void> {
-        return this.http.post<void>(this.baseUrl, quotationDetailRequest);
-      }
-
-
+    if (sort) {
+      params = params.set('sort', sort);
     }
+
+    return this.http.get<Page<QuotationDetail>>(`${this.baseUrl}/page`, { params });
+  }
+
+  getByQuotationId(quotationId: number,page: number = 0,size: number = 10,sort?: string): Observable<Page<QuotationDetail>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+      if (sort) {
+      params = params.set('sort', sort);
+    }
+
+    return this.http.get<Page<QuotationDetail>>(
+      `${this.baseUrl}/page/quotation/${quotationId}`,
+      { params }
+    );
+  }
+
+
+  addQuotationDetail(quotationDetailRequest: QuotationDetail): Observable<void> {
+    return this.http.post<void>(this.baseUrl, quotationDetailRequest);
+  }
+
+  deleteQuotationDetail(id: number): Observable<void> {
+      return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    }
+
+}

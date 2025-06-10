@@ -42,9 +42,9 @@ public class QuotationDetailService {
                 .quotation(quotation)
                 .productId(quotationDetailRequest.getProductId())
                 .quantity(quotationDetailRequest.getQuantity())
-                .unitPrice(quotationDetailRequest.getUnitPrice())
+                .unitPrice(product.getPrice())
                 .subtotal(
-                        quotationDetailRequest.getUnitPrice()
+                        product.getPrice()
                                 .multiply(BigDecimal.valueOf(quotationDetailRequest.getQuantity()))
                 )
                 .build();
@@ -55,12 +55,30 @@ public class QuotationDetailService {
         log.info("Quotation Detail saved for product ID {}: {}", quotationDetailRequest.getProductId(), quotationDetail);
     }
 
-    public Page<QuotationDetailResponse> getQuotationDetailsPage(Pageable pageable) {
-        var quotationsDetailPage = quotationDetailRepository.findAll(pageable);
-        log.info("Retrieved page {} of quotationDetails, size: {}", quotationsDetailPage.getNumber(), quotationsDetailPage.getSize());
+    public Page<QuotationDetailResponse> getPagedDetailsByQuotationId(Long quotationId, Pageable pageable) {
+        log.info("Fetching paged details for quotation ID: {}, page: {}, size: {}",
+                quotationId, pageable.getPageNumber(), pageable.getPageSize());
 
-        return quotationsDetailPage.map(this::mapToQuotationDetailResponse);
+        Page<QuotationDetail> detailPage = quotationDetailRepository.findByQuotationId(quotationId, pageable);
+
+        if (detailPage.isEmpty()) {
+            log.warn("No details found for quotation ID: {}", quotationId);
+        } else {
+            log.info("Retrieved {} details for quotation ID: {}", detailPage.getTotalElements(), quotationId);
+        }
+
+        return detailPage.map(this::mapToQuotationDetailResponse);
     }
+
+    public void deleteQuotationDetail(Long quotationDetailId) {
+        var existingQuotationDetail = quotationDetailRepository.findById(quotationDetailId)
+                .orElseThrow(() -> new RuntimeException("Quotation Detail not found with ID: " + quotationDetailId));
+
+        quotationDetailRepository.delete(existingQuotationDetail);
+
+        log.info("Quotation Detail deleted with ID: {}", quotationDetailId);
+    }
+
 
     private QuotationDetailResponse mapToQuotationDetailResponse(QuotationDetail quotation) {
         return QuotationDetailResponse.builder()

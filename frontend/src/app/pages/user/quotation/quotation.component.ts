@@ -21,7 +21,7 @@ import { ViewDetailsComponent } from '../view-details/view-details.component';
 })
 export class QuotationComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'client', 'date', 'details', 'total', 'status','actions'];
+  displayedColumns: string[] = ['id', 'client', 'date', 'details', 'total', 'status','download','actions'];
   dataSource = new MatTableDataSource<Quotation>([]);
 
   totalElements = 0;
@@ -96,39 +96,15 @@ export class QuotationComponent implements OnInit {
     });
   }
 
-  openQuotationDetailsModal() {
-    const dialogRef = this.dialog.open(ViewDetailsComponent, {
-      panelClass: 'custom-modal',
-      width: '60vw',
-      maxWidth: '100%',
-      height: '600px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.quotationService.addQuotation(result).subscribe({
-          next: (newQuotation) => {
-            console.log('Cotizacion creada:', newQuotation);
-            this.loadQuotations();
-            Swal.fire({
-              icon: 'success',
-              title: '¡Cotizacion guardada!',
-              text: 'La Cotizacion ha sido creado exitosamente.',
-              confirmButtonText: 'OK'
-            });
-          },
-          error: (error) => {
-            console.error('Error al crear cotizacion:', error);
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'No se pudo guardar la cotizacion.'
-            });
-          }
-        });
-      }
-    });
-  }
+  openQuotationDetailsModal(quotationId: number): void {
+  const dialogRef = this.dialog.open(ViewDetailsComponent, {
+    panelClass: 'custom-modal',
+    width: '60vw',
+    maxWidth: '100%',
+    height: '600px',
+    data: { quotationId }
+  });
+}
 
   deleteQuotation(id: number) {
     Swal.fire({

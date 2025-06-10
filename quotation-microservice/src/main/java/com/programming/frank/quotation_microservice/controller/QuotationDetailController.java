@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,9 +26,17 @@ public class QuotationDetailController {
         this.quotationDetailService.addQuotationDetail(quotationDetailRequest);
     }
 
-    @GetMapping("/page")
+    @GetMapping("/page/quotation/{quotationId}")
     @ResponseStatus(HttpStatus.OK)
-    public Page<QuotationDetailResponse> getQuotationDetails(Pageable pageable) {
-        return quotationDetailService.getQuotationDetailsPage(pageable);
+    public Page<QuotationDetailResponse> getQuotationDetails(@PathVariable("quotationId") Long quotationId, Pageable pageable) {
+        return quotationDetailService.getPagedDetailsByQuotationId(quotationId, pageable);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteQuotationDetail(@PathVariable Long id) {
+        this.quotationDetailService.deleteQuotationDetail(id);
+    }
+
+
 }
