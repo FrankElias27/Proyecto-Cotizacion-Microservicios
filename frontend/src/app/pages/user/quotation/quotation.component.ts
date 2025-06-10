@@ -151,7 +151,9 @@ export class QuotationComponent implements OnInit {
     });
   }
 
-  exportReport(id:number) {
+  exportReport(id:number,status:string) {
+    console.log(status)
+    if (status == 'PROCESSED'){
     const params = {
       cotizacion: id,
       tipo: 'PDF',
@@ -170,4 +172,14 @@ export class QuotationComponent implements OnInit {
       console.error('Error al exportar reporte:', error);
     });
   }
+  else{
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'La Cotizacion debe estar en Estado: PROCESSED'
+            });
+
+  }
+}
 }
