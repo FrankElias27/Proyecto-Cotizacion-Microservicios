@@ -13,12 +13,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/quotation-detail")
 @RequiredArgsConstructor
 public class QuotationDetailController {
 
     private final QuotationDetailService quotationDetailService;
+
+    @GetMapping("/{quotationId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<QuotationDetailResponse> getAllDetailsByQuotationId(@PathVariable Long quotationId) {
+        return quotationDetailService.getAllDetailsByQuotationId(quotationId);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

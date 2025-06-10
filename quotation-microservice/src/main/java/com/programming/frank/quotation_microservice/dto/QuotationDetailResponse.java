@@ -16,6 +16,7 @@ public class QuotationDetailResponse {
     private Long id;
     private Long quotationId;
     private ProductResponse product;
+    private String productName;
     private Integer quantity;
     private BigDecimal unitPrice;
     private BigDecimal subtotal;

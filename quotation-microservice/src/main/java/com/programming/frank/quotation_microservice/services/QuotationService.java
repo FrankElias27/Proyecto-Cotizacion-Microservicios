@@ -43,6 +43,31 @@ public class QuotationService {
         log.info("Quotation saved for client ID {}: {}", quotationRequest.getClientId(), quotation);
     }
 
+    public void updateQuotation(Long quotationId, QuotationRequest quotationRequest) {
+        var existingQuotation = quotationRepository.findById(quotationId)
+                .orElseThrow(() -> new RuntimeException("Quotation not found with ID: " + quotationId));
+
+        existingQuotation.setDate(LocalDateTime.now());
+        existingQuotation.setClientId(quotationRequest.getClientId());
+        existingQuotation.setSubject(quotationRequest.getSubject());
+        existingQuotation.setStatus(Status.PROCESSED);
+        existingQuotation.setTotal(quotationRequest.getTotal());
+
+        quotationRepository.save(existingQuotation);
+
+        log.info("Quotation updated: {}", existingQuotation);
+    }
+
+
+    public QuotationsResponse getQuotationById(Long quotationId) {
+        var quotation = quotationRepository.findById(quotationId)
+                .orElseThrow(() -> new RuntimeException("Quotation not found with ID: " + quotationId));
+
+        log.info("Retrieved client: {}", quotation);
+
+        return mapToQuotationResponse(quotation);
+    }
+
     public void deleteQuotation(Long quotationId) {
         var existingQuotation = quotationRepository.findById(quotationId)
                 .orElseThrow(() -> new RuntimeException("Quotation not found with ID: " + quotationId));

@@ -21,7 +21,7 @@ import { ViewDetailsComponent } from '../view-details/view-details.component';
 })
 export class QuotationComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'client', 'date', 'details', 'total', 'status','download','actions'];
+  displayedColumns: string[] = ['id', 'client', 'date', 'details', 'total', 'status', 'download', 'actions'];
   dataSource = new MatTableDataSource<Quotation>([]);
 
   totalElements = 0;
@@ -96,15 +96,24 @@ export class QuotationComponent implements OnInit {
     });
   }
 
-  openQuotationDetailsModal(quotationId: number): void {
-  const dialogRef = this.dialog.open(ViewDetailsComponent, {
-    panelClass: 'custom-modal',
-    width: '60vw',
-    maxWidth: '100%',
-    height: '600px',
-    data: { quotationId }
-  });
-}
+  openQuotationDetailsModal(quotationId: number, clientId: number): void {
+    console.log('Abrir modal con quotationId:', quotationId, 'y clientId:', clientId);
+    const dialogRef = this.dialog.open(ViewDetailsComponent, {
+      panelClass: 'custom-modal',
+      width: '60vw',
+      maxWidth: '100%',
+      height: '600px',
+      data: { quotationId, clientId },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'updated') {
+        this.loadQuotations();
+      }
+    });
+  }
+
+
 
   deleteQuotation(id: number) {
     Swal.fire({
@@ -139,6 +148,26 @@ export class QuotationComponent implements OnInit {
           }
         });
       }
+    });
+  }
+
+  exportReport(id:number) {
+    const params = {
+      cotizacion: id,
+      tipo: 'PDF',
+    };
+
+    this.quotationService.downloadReport(params).subscribe(blob => {
+      const a = document.createElement('a');
+      const objectUrl = URL.createObjectURL(blob);
+      a.href = objectUrl;
+
+      a.download = 'Cotizacion.pdf';
+
+      a.click();
+      URL.revokeObjectURL(objectUrl);
+    }, error => {
+      console.error('Error al exportar reporte:', error);
     });
   }
 }

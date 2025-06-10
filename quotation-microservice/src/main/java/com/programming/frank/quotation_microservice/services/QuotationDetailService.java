@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +42,7 @@ public class QuotationDetailService {
         var quotationDetail = QuotationDetail.builder()
                 .quotation(quotation)
                 .productId(quotationDetailRequest.getProductId())
+                .productName(product.getName())
                 .quantity(quotationDetailRequest.getQuantity())
                 .unitPrice(product.getPrice())
                 .subtotal(
@@ -70,6 +72,22 @@ public class QuotationDetailService {
         return detailPage.map(this::mapToQuotationDetailResponse);
     }
 
+    public List<QuotationDetailResponse> getAllDetailsByQuotationId(Long quotationId) {
+        log.info("Fetching all details for quotation ID: {}", quotationId);
+
+        var details = quotationDetailRepository.findByQuotationId(quotationId);
+
+        if (details.isEmpty()) {
+            log.warn("No details found for quotation ID: {}", quotationId);
+        } else {
+            log.info("Retrieved {} details for quotation ID: {}", details.size(), quotationId);
+        }
+
+        return details.stream()
+                .map(this::mapToQuotationDetailResponse)
+                .toList();
+    }
+
     public void deleteQuotationDetail(Long quotationDetailId) {
         var existingQuotationDetail = quotationDetailRepository.findById(quotationDetailId)
                 .orElseThrow(() -> new RuntimeException("Quotation Detail not found with ID: " + quotationDetailId));
@@ -85,6 +103,7 @@ public class QuotationDetailService {
                 .id(quotation.getId())
                 .quotationId(quotation.getQuotation().getId())
                 .product(productClient.getProductById(quotation.getProductId()))
+                .productName(quotation.getProductName())
                 .quantity(quotation.getQuantity())
                 .unitPrice(quotation.getUnitPrice())
                 .subtotal(quotation.getSubtotal())

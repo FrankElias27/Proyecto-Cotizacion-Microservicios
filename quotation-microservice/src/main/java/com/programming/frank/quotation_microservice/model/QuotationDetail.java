@@ -27,6 +27,9 @@ public class QuotationDetail {
     @Column(name = "product_id")
     private Long productId;
 
+    @Column(name = "product_name")
+    private String productName;
+
     private Integer quantity;
 
     @Column(name = "unit_price")

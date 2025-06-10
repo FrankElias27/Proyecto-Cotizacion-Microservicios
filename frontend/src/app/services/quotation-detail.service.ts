@@ -40,6 +40,11 @@ export class QuotationDetailService {
     );
   }
 
+  getDetailsByQuotationId(quotationId: number): Observable<QuotationDetail[]> {
+    const url = `${this.baseUrl}/${quotationId}`;
+    return this.http.get<QuotationDetail[]>(url);
+  }
+
 
   addQuotationDetail(quotationDetailRequest: QuotationDetail): Observable<void> {
     return this.http.post<void>(this.baseUrl, quotationDetailRequest);
