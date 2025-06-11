@@ -102,7 +102,7 @@ public class QuotationDetailService {
         return QuotationDetailResponse.builder()
                 .id(quotation.getId())
                 .quotationId(quotation.getQuotation().getId())
-                .product(productClient.getProductById(quotation.getProductId()))
+                .productId(quotation.getProductId())
                 .productName(quotation.getProductName())
                 .quantity(quotation.getQuantity())
                 .unitPrice(quotation.getUnitPrice())

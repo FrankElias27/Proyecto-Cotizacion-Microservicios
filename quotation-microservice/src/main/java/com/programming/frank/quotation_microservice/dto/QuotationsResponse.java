@@ -18,7 +18,8 @@ public class QuotationsResponse {
 
     private Long id;
     private LocalDateTime date;
-    private ClientResponse client;
+    private Long clientId;
+    private String clientName;
     private String subject;
     private Status status;
     private BigDecimal total;

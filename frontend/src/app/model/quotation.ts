@@ -6,7 +6,8 @@ import { StatusQuotation } from "./status-quotation";
 export interface Quotation {
   id?: number;
   date: Date;
-  client: Client;
+  clientId: number;
+  clientName:string;
   subject:string;
   status: StatusQuotation;
   total: number;

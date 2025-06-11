@@ -34,6 +34,7 @@ public class QuotationService {
 
         var quotation = Quotation.builder()
                 .clientId(quotationRequest.getClientId())
+                .clientName(quotationRequest.getClientName())
                 .subject(quotationRequest.getSubject())
                 .total(quotationRequest.getTotal())
                 .date(LocalDateTime.now())
@@ -101,7 +102,8 @@ public class QuotationService {
         return QuotationsResponse.builder()
                 .id(quotation.getId())
                 .date(quotation.getDate())
-                .client(clientClient.getClientById(quotation.getClientId()))
+                .clientId(quotation.getClientId())
+                .clientName(quotation.getClientName())
                 .total(quotation.getTotal())
                 .subject(quotation.getSubject())
                 .status(quotation.getStatus())

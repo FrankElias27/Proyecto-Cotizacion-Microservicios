@@ -78,8 +78,11 @@ export class CreateQuotationComponent implements OnInit {
 
     const payload = {
       clientId: formValue.client.id,
+      clientName :  formValue.client.firstName + ' ' + formValue.client.lastName,
       subject: formValue.subject,
     };
+
+    console.log(payload)
 
     this.dialogRef.close(payload);
   }

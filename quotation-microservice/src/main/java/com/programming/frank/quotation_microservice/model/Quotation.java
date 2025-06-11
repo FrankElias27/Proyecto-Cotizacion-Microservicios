@@ -31,6 +31,9 @@ public class Quotation {
     @Column(name = "client_id")
     private Long clientId; // ID from client microservice
 
+    @Column(name = "client_name")
+    private String clientName;
+
     private String subject;
 
     private Status status;

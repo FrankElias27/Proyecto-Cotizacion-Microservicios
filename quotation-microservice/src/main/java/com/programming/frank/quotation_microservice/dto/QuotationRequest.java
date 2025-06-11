@@ -16,6 +16,7 @@ import java.util.Set;
 public class QuotationRequest {
 
     private Long clientId;
+    private String clientName;
     private String subject;
     private Status status;
     private BigDecimal total;
