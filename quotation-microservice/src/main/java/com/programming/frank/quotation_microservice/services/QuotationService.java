@@ -4,12 +4,14 @@ import com.programming.frank.quotation_microservice.client.ClientClient;
 import com.programming.frank.quotation_microservice.dto.QuotationRequest;
 import com.programming.frank.quotation_microservice.dto.QuotationsResponse;
 import com.programming.frank.quotation_microservice.enums.Status;
+import com.programming.frank.quotation_microservice.event.QuotationEvent;
 import com.programming.frank.quotation_microservice.model.Quotation;
 import com.programming.frank.quotation_microservice.repository.QuotationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ public class QuotationService {
 
     private final QuotationRepository quotationRepository;
     private final ClientClient clientClient;
+    private final KafkaTemplate<String, QuotationEvent> kafkaTemplate;
 
     public void addQuotation(QuotationRequest quotationRequest) {
 
@@ -54,6 +57,16 @@ public class QuotationService {
         existingQuotation.setTotal(quotationRequest.getTotal());
 
         quotationRepository.save(existingQuotation);
+
+        //send the message to kafka topics
+        QuotationEvent quotationEvent = new QuotationEvent();
+
+        quotationEvent.setQuotationId(quotationId.toString());
+        quotationEvent.setSubject(existingQuotation.getSubject());
+        quotationEvent.setEmail(quotationRequest.getClientDetails().email());
+        log.info("Start sending Quotation Event {} to kafka topic quotation",quotationEvent);
+        kafkaTemplate.send("quotation",quotationEvent);
+        log.info("End sending Quotation Event {} to kafka topic quotation",quotationEvent);
 
         log.info("Quotation updated: {}", existingQuotation);
     }

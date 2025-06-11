@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "QuotationEvent",
+  "namespace": "com.programming.frank.quotation_microservice.event",
+  "fields": [
+    { "name": "quotationId", "type": "string" , "default": "" },
+    { "name": "subject", "type": "string" },
+    { "name": "email", "type": "string" }
+  ]
+}

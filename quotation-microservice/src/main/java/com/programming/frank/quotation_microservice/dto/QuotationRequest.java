@@ -20,5 +20,5 @@ public class QuotationRequest {
     private Status status;
     private BigDecimal total;
     private Set<QuotationDetailRequest> details;
-
+    private ClientDetails clientDetails;
 }

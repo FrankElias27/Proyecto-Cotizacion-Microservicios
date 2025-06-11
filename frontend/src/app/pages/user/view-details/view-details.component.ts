@@ -12,6 +12,7 @@ import { Page } from '../../../model/page';
 import { CreateQuotationDetailComponent } from '../create-quotation-detail/create-quotation-detail.component';
 import Swal from 'sweetalert2';
 import { QuotationService } from '../../../services/quotation.service';
+import { ClientService } from '../../../services/client.service';
 
 @Component({
   selector: 'app-view-details',
@@ -37,7 +38,8 @@ export class ViewDetailsComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { quotationId: number,clientId:number },
     private quotationDetailService: QuotationDetailService, private dialog: MatDialog,
-    private quotationService:QuotationService, private dialogRef: MatDialogRef<ViewDetailsComponent>
+    private quotationService:QuotationService, private dialogRef: MatDialogRef<ViewDetailsComponent>,
+    private clientService:ClientService,
   ) { }
 
   ngOnInit(): void {
@@ -106,27 +108,44 @@ export class ViewDetailsComponent {
 
       this.quotationService.getQuotationById(quotationId).subscribe({
         next: (quotation) => {
-          const updatedQuotation = { ...quotation, total,clientId };
 
-          this.quotationService.updateQuotation(quotationId, updatedQuotation).subscribe({
-             next: () => {
-              Swal.fire({
-                icon: 'success',
-                title: 'Cotización procesada',
-                text: `El total de la cotización se actualizó a S/ ${total.toFixed(2)}.`
-              }).then(() => {
-                this.dialogRef.close('updated');
+          this.clientService.getClientById(clientId).subscribe({
+            next:(client) => {
+          const updatedQuotation = { ...quotation, total,clientId, clientDetails:{email:client.email}
+        };
+
+        console.log(updatedQuotation)
+
+              this.quotationService.updateQuotation(quotationId, updatedQuotation).subscribe({
+                next: () => {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Cotización procesada',
+                    text: `El total de la cotización se actualizó a S/ ${total.toFixed(2)}.`
+                  }).then(() => {
+                    this.dialogRef.close('updated');
+                  });
+                },
+                error: (err) => {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error al procesar',
+                    text: 'Ocurrió un error al actualizar la cotización.'
+                  });
+                  console.error('Error al actualizar cotización:', err);
+                }
               });
             },
             error: (err) => {
               Swal.fire({
                 icon: 'error',
-                title: 'Error al procesar',
-                text: 'Ocurrió un error al actualizar la cotización.'
+                title: 'Error al obtener cliente',
+                text: 'No se pudo obtener la información del cliente.'
               });
-              console.error('Error al actualizar cotización:', err);
+              console.error('Error al obtener cliente:', err);
             }
           });
+
         },
         error: (err) => {
           Swal.fire({
@@ -148,6 +167,10 @@ export class ViewDetailsComponent {
     }
   });
 }
+
+onCancel() {
+    this.dialogRef.close();
+  }
 
 
   deleteQuotationDetail(id: number) {

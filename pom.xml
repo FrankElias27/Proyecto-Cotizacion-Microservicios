@@ -21,6 +21,7 @@
 		<module>product-microservice</module>
 		<module>client-microservice</module>
 		<module>quotation-microservice</module>
+		<module>notification-microservice</module>
 	</modules>
 
 	<properties>
