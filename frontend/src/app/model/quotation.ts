@@ -8,6 +8,7 @@ export interface Quotation {
   date: Date;
   clientId: number;
   clientName:string;
+  clientEmail:string;
   subject:string;
   status: StatusQuotation;
   total: number;

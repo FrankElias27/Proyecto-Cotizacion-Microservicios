@@ -108,10 +108,10 @@ export class ViewDetailsComponent {
 
       this.quotationService.getQuotationById(quotationId).subscribe({
         next: (quotation) => {
+          console.log(quotation)
 
-          this.clientService.getClientById(clientId).subscribe({
-            next:(client) => {
-          const updatedQuotation = { ...quotation, total,clientId, clientDetails:{email:client.email}
+
+          const updatedQuotation = { ...quotation, total,clientId, clientDetails:{email:quotation.clientEmail}
         };
 
         console.log(updatedQuotation)
@@ -135,16 +135,10 @@ export class ViewDetailsComponent {
                   console.error('Error al actualizar cotización:', err);
                 }
               });
-            },
-            error: (err) => {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error al obtener cliente',
-                text: 'No se pudo obtener la información del cliente.'
-              });
-              console.error('Error al obtener cliente:', err);
-            }
-          });
+
+
+
+
 
         },
         error: (err) => {

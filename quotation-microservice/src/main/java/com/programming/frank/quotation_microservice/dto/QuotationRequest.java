@@ -17,6 +17,7 @@ public class QuotationRequest {
 
     private Long clientId;
     private String clientName;
+    private String clientEmail;
     private String subject;
     private Status status;
     private BigDecimal total;

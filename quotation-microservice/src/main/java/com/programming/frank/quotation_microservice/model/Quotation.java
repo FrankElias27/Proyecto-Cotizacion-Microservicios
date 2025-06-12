@@ -34,6 +34,9 @@ public class Quotation {
     @Column(name = "client_name")
     private String clientName;
 
+    @Column(name = "client_email")
+    private String clientEmail;
+
     private String subject;
 
     private Status status;

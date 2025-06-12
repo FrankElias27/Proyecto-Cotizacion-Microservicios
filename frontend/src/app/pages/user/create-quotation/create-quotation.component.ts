@@ -79,6 +79,7 @@ export class CreateQuotationComponent implements OnInit {
     const payload = {
       clientId: formValue.client.id,
       clientName :  formValue.client.firstName + ' ' + formValue.client.lastName,
+      clientEmail: formValue.client.email,
       subject: formValue.subject,
     };
 

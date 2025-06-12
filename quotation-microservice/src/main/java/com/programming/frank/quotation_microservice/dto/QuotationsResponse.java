@@ -20,6 +20,7 @@ public class QuotationsResponse {
     private LocalDateTime date;
     private Long clientId;
     private String clientName;
+    private String clientEmail;
     private String subject;
     private Status status;
     private BigDecimal total;
