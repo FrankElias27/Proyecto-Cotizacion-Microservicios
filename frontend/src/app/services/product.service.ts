@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class ProductService {
 
-  private baseUrl = 'http://localhost:9000/api/product';
+  private baseUrl = 'https://system-quotation.webpageica.com/api/product';
 
     constructor(private http: HttpClient) { }
 

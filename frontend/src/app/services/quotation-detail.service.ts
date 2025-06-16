@@ -9,7 +9,7 @@ import { QuotationDetail } from '../model/quotationDetail';
 })
 export class QuotationDetailService {
 
-  private baseUrl = 'http://localhost:9000/api/quotation-detail';
+  private baseUrl = 'https://system-quotation.webpageica.com/api/quotation-detail';
 
   constructor(private http: HttpClient) { }
 

@@ -9,7 +9,7 @@ import { Page } from '../model/page';
 })
 export class ClientService {
 
-  private baseUrl = 'http://localhost:9000/api/client';
+  private baseUrl = 'https://system-quotation.webpageica.com/api/client';
 
   constructor(private http: HttpClient) { }
 

@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-proxy
+  template:
+    metadata:
+      labels:
+        app: nginx-proxy
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: config-volume
+          configMap:
+            name: nginx-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-proxy
+spec:
+  selector:
+    app: nginx-proxy
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    server {
+      listen 80;
+
+      # Frontend Angular
+      location / {
+        proxy_pass http://frontend:80;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
+      location /api/ {
+        proxy_pass http://api-gateway:9000/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
+      # Keycloak: para que Angular se conecte al backend de autenticación
+      location /realms/ {
+        proxy_pass http://keycloak:8080/realms/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
+      # (Opcional) Si usas /auth/realms en alguna configuración
+      location /auth/realms/ {
+        proxy_pass http://keycloak:8080/auth/realms/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
+      # (Opcional) Panel de administración de Keycloak
+      location /admin/ {
+        proxy_pass http://keycloak:8080/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
+     location /resources/ {
+        proxy_pass http://keycloak:8080/resources/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
+    location /js/ {
+        proxy_pass http://keycloak:8080/js/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
+    location /img/ {
+        proxy_pass http://keycloak:8080/img/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
+    location /favicon.ico {
+        proxy_pass http://keycloak:8080/favicon.ico;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+
+    }

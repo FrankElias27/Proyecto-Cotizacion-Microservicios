@@ -9,7 +9,7 @@ import { Quotation } from '../model/quotation';
 })
 export class QuotationService {
 
-  private baseUrl = 'http://localhost:9000/api/quotation';
+  private baseUrl = 'https://system-quotation.webpageica.com/api/quotation';
 
   constructor(private http: HttpClient) { }
 
