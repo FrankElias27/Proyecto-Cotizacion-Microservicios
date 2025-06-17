@@ -15,13 +15,13 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-client',
   standalone: true,
-  imports: [MatTableModule,MatPaginator, FormsModule,MatIconModule,MatDialogModule,CommonModule],
+  imports: [MatTableModule, MatPaginator, FormsModule, MatIconModule, MatDialogModule, CommonModule],
   templateUrl: './client.component.html',
   styleUrl: './client.component.css'
 })
 export class ClientComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'lastname', 'dni','email','phone','address','actions'];
+  displayedColumns: string[] = ['id', 'name', 'lastname', 'dni', 'email', 'phone', 'address', 'actions'];
   dataSource = new MatTableDataSource<Client>([]);
 
   totalElements = 0;
@@ -36,7 +36,7 @@ export class ClientComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private clientService: ClientService,private dialog: MatDialog) {}
+  constructor(private clientService: ClientService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.loadClients();
@@ -68,7 +68,7 @@ export class ClientComponent implements OnInit {
     });
   }
 
-   onPageChange(event: PageEvent): void {
+  onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
 
@@ -79,7 +79,7 @@ export class ClientComponent implements OnInit {
     }
   }
 
-   applyFilter(): void {
+  applyFilter(): void {
     this.pageIndex = 0;
 
     if (this.searchValue.trim()) {
@@ -89,7 +89,7 @@ export class ClientComponent implements OnInit {
     }
   }
 
-    openAddClientModal() {
+  openAddClientModal() {
     const dialogRef = this.dialog.open(CreateClientComponent, {
       width: '400px',
     });
@@ -101,26 +101,26 @@ export class ClientComponent implements OnInit {
             console.log('Cliente creado:', newClient);
             this.loadClients();
             Swal.fire({
-                        icon: 'success',
-                        title: '¡Cliente guardado!',
-                        text: 'El cliente ha sido creado exitosamente.',
-                        confirmButtonText: 'OK'
-                      });
+              icon: 'success',
+              title: '¡Cliente guardado!',
+              text: 'El cliente ha sido creado exitosamente.',
+              confirmButtonText: 'OK',
+            });
           },
           error: (error) => {
             console.error('Error al crear cliente:', error);
             Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'No se pudo guardar el cliente.'
-                      });
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo guardar el cliente.'
+            });
           }
         });
       }
     });
   }
 
-   editClient(id: number) {
+  editClient(id: number) {
     this.clientService.getClientById(id).subscribe(client => {
       const dialogRef = this.dialog.open(EditClientComponent, {
         width: '400px',
@@ -135,10 +135,10 @@ export class ClientComponent implements OnInit {
             next: () => {
               // Actualizar localmente el datasource para reflejar cambios
               const index = this.dataSource.data.findIndex(c => c.id === id);
-                if (index !== -1) {
-                  this.dataSource.data[index] = updatedClient;
-                  this.dataSource.data = [...this.dataSource.data]; // Clonamos para que Angular detecte el cambio
-                }
+              if (index !== -1) {
+                this.dataSource.data[index] = updatedClient;
+                this.dataSource.data = [...this.dataSource.data]; // Clonamos para que Angular detecte el cambio
+              }
 
               Swal.fire('¡Éxito!', 'Cliente actualizado correctamente.', 'success');
             },
@@ -153,7 +153,7 @@ export class ClientComponent implements OnInit {
     });
   }
 
-   deleteClient(id: number) {
+  deleteClient(id: number) {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¡No podrás revertir esto!",
@@ -190,65 +190,65 @@ export class ClientComponent implements OnInit {
   }
 
   exportReport() {
-  const params = {
-    tipo: 'EXCEL',
-  };
+    const params = {
+      tipo: 'EXCEL',
+    };
 
-  this.clientService.downloadReport(params).subscribe(blob => {
-    const a = document.createElement('a');
-    const objectUrl = URL.createObjectURL(blob);
-    a.href = objectUrl;
+    this.clientService.downloadReport(params).subscribe(blob => {
+      const a = document.createElement('a');
+      const objectUrl = URL.createObjectURL(blob);
+      a.href = objectUrl;
 
-    a.download = 'ReporteClientes.xlsx';
+      a.download = 'ReporteClientes.xlsx';
 
-    a.click();
-    URL.revokeObjectURL(objectUrl);
-  }, error => {
-    console.error('Error al exportar reporte:', error);
-  });
-}
-
-
-
-onFileSelectedAndUpload(event: Event): void {
-  const file = (event.target as HTMLInputElement).files?.[0];
-
-  if (!file) return;
-
-  if (!file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Formato inválido',
-      text: 'Solo se permiten archivos .xls o .xlsx',
-      confirmButtonColor: '#f39c12',
-      confirmButtonText: 'Entendido',
+      a.click();
+      URL.revokeObjectURL(objectUrl);
+    }, error => {
+      console.error('Error al exportar reporte:', error);
     });
-    return;
   }
 
-  this.clientService.importClientsFromExcel(file).subscribe({
-    next: (res) => {
+
+
+  onFileSelectedAndUpload(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+
+    if (!file) return;
+
+    if (!file.name.endsWith('.xls') && !file.name.endsWith('.xlsx')) {
       Swal.fire({
-        icon: 'success',
-        title: '¡Importación exitosa!',
-        text: res,
-        confirmButtonColor: '#28a745',
-        confirmButtonText: 'OK',
-      }).then((result) => {
-        if (result.isConfirmed) {
-           this.loadClients();
-        }
+        icon: 'warning',
+        title: 'Formato inválido',
+        text: 'Solo se permiten archivos .xls o .xlsx',
+        confirmButtonColor: '#f39c12',
+        confirmButtonText: 'Entendido',
       });
-    },
-    error: (err) => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al importar',
-        text: err.error || 'Algo salió mal al procesar el archivo',
-        confirmButtonColor: '#dc3545',
-        confirmButtonText: 'Reintentar',
-      });
+      return;
     }
-  });
-}
+
+    this.clientService.importClientsFromExcel(file).subscribe({
+      next: (res) => {
+        Swal.fire({
+          icon: 'success',
+          title: '¡Importación exitosa!',
+          text: res,
+          confirmButtonColor: '#28a745',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.loadClients();
+          }
+        });
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al importar',
+          text: err.error || 'Algo salió mal al procesar el archivo',
+          confirmButtonColor: '#dc3545',
+          confirmButtonText: 'Reintentar',
+        });
+      }
+    });
+  }
 }

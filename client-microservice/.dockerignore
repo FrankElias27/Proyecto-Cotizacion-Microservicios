@@ -1,0 +1,17 @@
+# Archivos y carpetas comunes que no deben ir al build context
+**/target/
+!target/
+**/build/
+**/.git/
+**/.idea/
+**/.vscode/
+**/*.iml
+
+# Archivos de configuración innecesarios
+.DS_Store
+.env
+*.log
+
+# Archivos del sistema operativo
+Thumbs.db
+ehthumbs.db
