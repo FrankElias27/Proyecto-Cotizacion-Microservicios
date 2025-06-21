@@ -1,26 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: inventory-service
+  name: quotation-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: inventory-service
+      app: quotation-service
   template:
     metadata:
       labels:
-        app: inventory-service
+        app: quotation-service
     spec:
       containers:
-        - name: inventory-service
-          image: saiupadhyayula007/new-inventory-service:latest
+        - name: quotation-service
+          image: frankelias27/coti-quotation-microservice:latest
           env:
+            - name: SPRING_KAFKA_BOOTSTRAP-SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  key: SPRING_KAFKA_BOOTSTRAP-SERVERS
+                  name: common-config
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 configMapKeyRef:
                   key: SPRING_DATASOURCE_URL
-                  name: inventory-service-config
+                  name: quotation-service-config
             - name: LOKI_URL
               valueFrom:
                 configMapKeyRef:
@@ -31,22 +36,33 @@ spec:
                 configMapKeyRef:
                   key: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
                   name: common-config
+            - name: QUOTATION_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: QUOTATION_SERVICE_URL
+                  name: common-config
+            - name: SPRING_KAFKA_PRODUCER_PROPERTIES_SCHEMA_REGISTRY_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: SPRING_KAFKA_PRODUCER_PROPERTIES_SCHEMA_REGISTRY_URL
+                  name: quotation-service-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: inventory-service
+  name: quotation-service
 spec:
   selector:
-    app: inventory-service
+    app: quotation-service
   ports:
     - protocol: TCP
-      port: 8082
-      targetPort: 8082
+      port: 8081
+      targetPort: 8081
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: inventory-service-config
+  name: quotation-service-config
 data:
-  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql.default.svc.cluster.local:3306/inventory_service"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql.default.svc.cluster.local:3306/quotation_service"
+  SPRING_KAFKA_PRODUCER_PROPERTIES_SCHEMA_REGISTRY_URL: "http://schema-registry.default.svc.cluster.local:8081"
