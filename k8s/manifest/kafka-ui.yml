@@ -12,6 +12,8 @@ spec:
       labels:
         app: kafka-ui
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker4-server
       containers:
         - name: kafka-ui
           image: provectuslabs/kafka-ui:latest

@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -49,16 +50,16 @@ public class ReportServiceImpl implements ReportService {
             throws JRException, IOException, SQLException {
         String fileName = "Cotizacion";
         Report dto = new Report();
-        String extension = params.get("tipo").toString().equalsIgnoreCase(TypeReport.EXCEL.name()) ? ".xlsx"
-                : ".pdf";
+        String extension = params.get("tipo").toString().equalsIgnoreCase(TypeReport.EXCEL.name()) ? ".xlsx" : ".pdf";
         dto.setFileName(fileName + extension);
 
-        ByteArrayOutputStream stream = reportManager.export(fileName, params.get("tipo").toString(), params,
-                dataSource.getConnection());
+        try (Connection connection = dataSource.getConnection();
+             ByteArrayOutputStream stream = reportManager.export(fileName, params.get("tipo").toString(), params, connection)) {
 
-        byte[] bs = stream.toByteArray();
-        dto.setStream(new ByteArrayInputStream(bs));
-        dto.setLength(bs.length);
+            byte[] bs = stream.toByteArray();
+            dto.setStream(new ByteArrayInputStream(bs));
+            dto.setLength(bs.length);
+        }
 
         return dto;
     }

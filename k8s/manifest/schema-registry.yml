@@ -12,6 +12,8 @@ spec:
       labels:
         app: schema-registry
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker5-server
       enableServiceLinks: false
       containers:
         - name: schema-registry

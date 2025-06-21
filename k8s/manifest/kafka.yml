@@ -12,6 +12,8 @@ spec:
       labels:
         app: broker
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker4-server
       enableServiceLinks: false
       containers:
         - name: broker

@@ -12,6 +12,8 @@ spec:
       labels:
         app: zookeeper
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker4-server
       containers:
         - name: zookeeper
           image: confluentinc/cp-zookeeper:7.5.0

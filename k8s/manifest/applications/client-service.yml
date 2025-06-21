@@ -33,6 +33,8 @@ spec:
                 configMapKeyRef:
                   key: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
                   name: common-config
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Djava.awt.headless=true"
 ---
 apiVersion: v1
 kind: Service

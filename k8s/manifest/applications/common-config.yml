@@ -8,3 +8,5 @@ data:
   MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: "http://tempo.default.svc.cluster.local:9411"
   PRODUCT_SERVICE_URL: "http://product-service.default.svc.cluster.local:8081"
   CLIENT_SERVICE_URL: "http://client-service.default.svc.cluster.local:8082"
+  QUOTATION_SERVICE_URL: "http://quotation-service.default.svc.cluster.local:8083"
+  SPRING_KAFKA_BOOTSTRAP-SERVERS: "broker.default.svc.cluster.local:29092"

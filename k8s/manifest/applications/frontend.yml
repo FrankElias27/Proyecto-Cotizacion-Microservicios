@@ -12,6 +12,8 @@ spec:
       labels:
         app: frontend
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker2-server
       containers:
         - name: frontend
           image: frankelias27/coti-frontend:latest
