@@ -56,24 +56,24 @@ Debera obtener el siguiente resultado.
 kubectl get pods -o wide
 ```
 
-| NAME                                  | READY | STATUS  | RESTARTS      | AGE   | IP            | NODE           | NOMINATED NODE | READINESS GATES |
-| ------------------------------------- | ----- | ------- | ------------- | ----- | ------------- | -------------- | -------------- | --------------- |
-| api-gateway-6b84d9ccf9-cbdtl          | 1/1   | Running | 1 (105s ago)  | 156m  | 192.168.3.127 | worker3-server | <none>         | <none>          |
-| broker-7897476547-plznt               | 1/1   | Running | 3 (106s ago)  | 20h   | 192.168.4.212 | worker4-server | <none>         | <none>          |
-| client-service-76f9d59c4c-6dcm6       | 1/1   | Running | 1 (105s ago)  | 156m  | 192.168.3.50  | worker3-server | <none>         | <none>          |
-| frontend-76dd44f7c9-xnmt8             | 1/1   | Running |  2 (2m42s ago)| 15h   | 192.168.2.144 | worker2-server | <none>         | <none>          |
-| grafana-5875fbf85-9lv92               | 1/1   | Running | 14 (119s ago) | 5d23h | 192.168.1.153 | worker1-server | <none>         | <none>          |
-| kafka-ui-59dd4954b5-pz22m             | 1/1   | Running | 3 (106s ago)  | 20h   | 192.168.4.8   | worker4-server | <none>         | <none>          |
-| keycloak-957c65686-x5tgf              | 1/1   | Running | 9 (116s ago)  | 4d21h | 192.168.2.17  | worker2-server | <none>         | <none>          |
-| loki-bc54ffd8-tqnzd                   | 1/1   | Running | 14 (119s ago) | 5d23h | 192.168.1.171 | worker1-server | <none>         | <none>          |
-| mysql-7b888cdc48-mxcgb                | 1/1   | Running | 11 (119s ago) | 4d22h | 192.168.1.113 | worker1-server | <none>         | <none>          |
-| nginx-proxy-675cfcf87b-7ztl8          | 1/1   | Running | 3 (20s ago)   | 15h   | 192.168.4.72  | worker4-server | <none>         | <none>          |
-| notification-service-7d8d76b475-jwf5b | 1/1   | Running | 1 (105s ago)  | 139m  | 192.168.5.59  | worker5-server | <none>         | <none>          |
-| product-service-7c8c84cf89-k59m2      | 1/1   | Running | 1 (105s ago)  | 156m  | 192.168.3.172 | worker3-server | <none>         | <none>          |
-| prometheus-6b4cd5c7fc-95qzk           | 1/1   | Running | 11 (119s ago) | 4d22h | 192.168.1.211 | worker1-server | <none>         | <none>          |
-| quotation-service-7744f9cc8d-hlml9    | 1/1   | Running | 1 (105s ago)  | 156m  | 192.168.5.11  | worker5-server | <none>         | <none>          |
-| schema-registry-6bc997f695-zgqnt      | 1/1   | Running | 2 (105s ago)  | 15h   | 192.168.5.196 | worker5-server | <none>         | <none>          |
-| tempo-7c8966c5d6-s84mb                | 1/1   | Running | 11 (119s ago) | 4d22h | 192.168.1.56  | worker1-server | <none>         | <none>          |
-| zookeeper-7b644bdfcd-fknsr            | 1/1   | Running | 3 (106s ago)  | 20h   | 192.168.4.179 | worker4-server | <none>         | <none>          |
+| NAME                                  | READY | STATUS  | RESTARTS      | AGE   | IP            | NODE           | 
+| ------------------------------------- | ----- | ------- | ------------- | ----- | ------------- | -------------- | 
+| api-gateway-6b84d9ccf9-cbdtl          | 1/1   | Running | 1 (105s ago)  | 156m  | 192.168.3.127 | worker3-server |
+| broker-7897476547-plznt               | 1/1   | Running | 3 (106s ago)  | 20h   | 192.168.4.212 | worker4-server | 
+| client-service-76f9d59c4c-6dcm6       | 1/1   | Running | 1 (105s ago)  | 156m  | 192.168.3.50  | worker3-server |
+| frontend-76dd44f7c9-xnmt8             | 1/1   | Running |  2 (2m42s ago)| 15h   | 192.168.2.144 | worker2-server |
+| grafana-5875fbf85-9lv92               | 1/1   | Running | 14 (119s ago) | 5d23h | 192.168.1.153 | worker1-server | 
+| kafka-ui-59dd4954b5-pz22m             | 1/1   | Running | 3 (106s ago)  | 20h   | 192.168.4.8   | worker4-server | 
+| keycloak-957c65686-x5tgf              | 1/1   | Running | 9 (116s ago)  | 4d21h | 192.168.2.17  | worker2-server | 
+| loki-bc54ffd8-tqnzd                   | 1/1   | Running | 14 (119s ago) | 5d23h | 192.168.1.171 | worker1-server | 
+| mysql-7b888cdc48-mxcgb                | 1/1   | Running | 11 (119s ago) | 4d22h | 192.168.1.113 | worker1-server | 
+| nginx-proxy-675cfcf87b-7ztl8          | 1/1   | Running | 3 (20s ago)   | 15h   | 192.168.4.72  | worker4-server |
+| notification-service-7d8d76b475-jwf5b | 1/1   | Running | 1 (105s ago)  | 139m  | 192.168.5.59  | worker5-server | 
+| product-service-7c8c84cf89-k59m2      | 1/1   | Running | 1 (105s ago)  | 156m  | 192.168.3.172 | worker3-server |
+| prometheus-6b4cd5c7fc-95qzk           | 1/1   | Running | 11 (119s ago) | 4d22h | 192.168.1.211 | worker1-server | 
+| quotation-service-7744f9cc8d-hlml9    | 1/1   | Running | 1 (105s ago)  | 156m  | 192.168.5.11  | worker5-server | 
+| schema-registry-6bc997f695-zgqnt      | 1/1   | Running | 2 (105s ago)  | 15h   | 192.168.5.196 | worker5-server |
+| tempo-7c8966c5d6-s84mb                | 1/1   | Running | 11 (119s ago) | 4d22h | 192.168.1.56  | worker1-server |
+| zookeeper-7b644bdfcd-fknsr            | 1/1   | Running | 3 (106s ago)  | 20h   | 192.168.4.179 | worker4-server | 
 
 
