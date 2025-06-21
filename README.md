@@ -1,7 +1,7 @@
 # Sistema de Generación de Cotizaciones
 Este repositorio contiene el último código fuente del Sistema de Generación de Cotizaciones
 
-## Services Overview
+## Descripción general de los servicios
 
 - Client Service
 - Product Service
@@ -10,7 +10,7 @@ Este repositorio contiene el último código fuente del Sistema de Generación d
 - API Gateway 
 - Frontend using Angular 18
 
-## Tech Stack
+## Stack tecnológico
 
 Las tecnologías utilizadas en este proyecto son:
 
@@ -25,3 +25,7 @@ Las tecnologías utilizadas en este proyecto son:
 
 ##  Arquitectura del Cluster de Kubernetes
 ![image](https://github.com/FrankElias27/Proyecto-Cotizacion-Microservicios/blob/main/ClusterKubernetes.png)
+
+##  Arquitectura de la aplicación
+![image](https://github.com/FrankElias27/Proyecto-Cotizacion-Microservicios/blob/main/SistemaCotizacion.png)
+
